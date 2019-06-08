@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Contracts</id>
+    <version>0.2.0</version>
+    <title>BrutalHack.Contracts</title>
+    <authors>BrutalHack</authors>
+    <owners>BrutalHack</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/BrutalHack/Contracts</projectUrl>
+    <description>Lightweight Runtime-Only Contracts for .Net Applications. Focus lies on Readability and Extensibility. Under MIT License.</description>
+    <releaseNotes>Added various generic constraints.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>contract, validate, check, runtime, argument, parameter, constraint</tags>
+    <repository type="git" url="https://github.com/BrutalHack/Contracts" />
+  </metadata>
+</package>

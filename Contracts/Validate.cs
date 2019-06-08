@@ -31,9 +31,25 @@ namespace BrutalHack.Contracts
                 throw new ArgumentNullException();
             }
 
-            if (collection.Count <= 0)
+            if (collection.Count == 0)
             {
                 throw new ArgumentEmptyException();
+            }
+        }
+        
+        /// <param name="collection"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentEmptyException"></exception>
+        public static void IsEmpty(ICollection collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (collection.Count > 0)
+            {
+                throw new ArgumentNotEmptyException();
             }
         }
 
@@ -59,6 +75,26 @@ namespace BrutalHack.Contracts
 
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsNegative(int value)
+        {
+            if (value >= 0)
+            {
+                throw new ArgumentOutOfRangeException($"Value must be negative! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsNegative(float value)
+        {
+            if (value >= 0f)
+            {
+                throw new ArgumentOutOfRangeException($"Value must be positive! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static void IsPositiveOrZero(int value)
         {
             if (value < 0)
@@ -74,6 +110,46 @@ namespace BrutalHack.Contracts
             if (value < 0)
             {
                 throw new ArgumentOutOfRangeException($"Value can't be negative! Current: {value}");
+            }
+        }
+        
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsNegativeOrZero(int value)
+        {
+            if (value > 0)
+            {
+                throw new ArgumentOutOfRangeException($"Value can't be positive! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsNegativeOrZero(float value)
+        {
+            if (value > 0)
+            {
+                throw new ArgumentOutOfRangeException($"Value can't be positive! Current: {value}");
+            }
+        }
+        
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsTrue(bool value)
+        {
+            if (!value)
+            {
+                throw new ArgumentOutOfRangeException($"Value must be true! Current: {false}");
+            }
+        }
+        
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsFalse(bool value)
+        {
+            if (value)
+            {
+                throw new ArgumentOutOfRangeException($"Value must be false! Current: {true}");
             }
         }
 
@@ -121,11 +197,11 @@ namespace BrutalHack.Contracts
         /// <param name="max"></param>
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static void IsInRange(int min, int max, int value)
+        public static void IsWithinRange(int min, int max, int value)
         {
-            if (min + 1 >= max)
+            if (min > max)
             {
-                throw new InvalidOperationException("Invalid boundaries for the open interval: ({min}, {max})");
+                throw new InvalidOperationException("Invalid boundaries for the closed interval: ({min}, {max})");
             }
             if (value < min || value > max)
             {
@@ -134,18 +210,52 @@ namespace BrutalHack.Contracts
             }
         }
 
+        /// <param name="min"></param>
+        /// <param name="max"></param>
         /// <param name="value"></param>
-        /// <param name="possibleValues"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static void IsPossibleValue(int[] possibleValues, int value)
+        public static void IsWithinRange(float min, float max, float value)
         {
-            if (possibleValues.Length == 0)
+            if (min > max)
             {
-                throw new InvalidOperationException("No possible values given.");
+                throw new InvalidOperationException("Invalid boundaries for the closed interval: ({min}, {max})");
             }
-            if (!possibleValues.Contains(value))
+            if (value < min || value > max)
             {
-                throw new ArgumentOutOfRangeException($"Possible values are: {possibleValues}! Current: {value}");
+                throw new ArgumentOutOfRangeException(
+                    $"Value must be in range min: {min} max: {max}! Current: {value}");
+            }
+        }
+
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void IsWithinRangeExcludingBoundaries(float min, float max, float value)
+        {
+            if (min > max)
+            {
+                throw new InvalidOperationException("Invalid boundaries for the open interval: ({min}, {max})");
+            }
+            if (value <= min || value >= max)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"Value must be in range min: {min} max: {max}! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <param name="expectedValues"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void Contains(int[] expectedValues, int value)
+        {
+            if (expectedValues.Length == 0)
+            {
+                throw new InvalidOperationException("No expected values given.");
+            }
+            if (!expectedValues.Contains(value))
+            {
+                throw new ArgumentOutOfRangeException($"Expected values are: {expectedValues}! Current: {value}");
             }
         }
 
