@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{9272B4E2-9EBF-47D7-8990-A5A0244ECDAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Test", "Contracts.Test\Contracts.Test.csproj", "{6B95A9D7-CEB9-4FA8-B9FD-1F7345AA6572}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9272B4E2-9EBF-47D7-8990-A5A0244ECDAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9272B4E2-9EBF-47D7-8990-A5A0244ECDAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9272B4E2-9EBF-47D7-8990-A5A0244ECDAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9272B4E2-9EBF-47D7-8990-A5A0244ECDAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B95A9D7-CEB9-4FA8-B9FD-1F7345AA6572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B95A9D7-CEB9-4FA8-B9FD-1F7345AA6572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B95A9D7-CEB9-4FA8-B9FD-1F7345AA6572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B95A9D7-CEB9-4FA8-B9FD-1F7345AA6572}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
