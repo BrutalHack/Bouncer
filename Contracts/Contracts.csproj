@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<RootNamespace>BrutalHack.Contracts</RootNamespace>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageVersion>0.1.0</PackageVersion>
+		<PackageVersion>0.2.0</PackageVersion>
 		<Title>BrutalHack.Contracts</Title>
 		<Description>Lightweight Runtime-Only Contracts for .Net Applications. Focus lies on Readability and Extensibility. Under MIT License.</Description>
-		<Copyright>BrutalHack</Copyright>
+		<Copyright>Copyright 2019</Copyright>
 		<PackageProjectUrl>https://github.com/BrutalHack/Contracts</PackageProjectUrl>
 		<PackageLicenseUrl>https://github.com/BrutalHack/Contracts/blob/master/LICENSE</PackageLicenseUrl>
 		<RepositoryUrl>https://github.com/BrutalHack/Contracts</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>contract, validate, check, runtime, argument, parameter, constraint</PackageTags>
-		<PackageReleaseNotes>Initial release. Contains few constraints only.</PackageReleaseNotes>
+		<PackageReleaseNotes>Added various generic constraints.</PackageReleaseNotes>
+		<PackageId>BrutalHack.Contracts</PackageId>
+		<Authors>BrutalHack</Authors>
 	</PropertyGroup>
 
 </Project>
