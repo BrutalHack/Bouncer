@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using BrutalHack.Bouncer;
 using BrutalHack.Bouncer.Exceptions;
 using JetBrains.Annotations;
@@ -18,7 +17,6 @@ namespace Bouncer.Test.BouncerTest
             private IBouncer _bouncer;
 
             [SetUp]
-
             public void SetUp()
             {
                 _bouncer = new BrutalHack.Bouncer.Bouncer();
@@ -259,12 +257,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsPositiveOrZero
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -317,12 +315,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsNegative
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -374,12 +372,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsNegativeOrZero
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -432,12 +430,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsNotEmpty
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -511,12 +509,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsEmpty
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -589,12 +587,12 @@ namespace Bouncer.Test.BouncerTest
 
         public class IsWithinRangeInt
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -645,12 +643,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsWithinRangeFloat
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -701,12 +699,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsWithinRangeExcludingBoundaries
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -759,12 +757,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class Contains
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -805,12 +803,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsGreater
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -841,12 +839,12 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class IsGreaterOrEqual
         {
-            private BouncerClass _bouncer;
+            private IBouncer _bouncer;
 
             [SetUp]
             public void SetUp()
             {
-                _bouncer = new BouncerClass();
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
             }
 
             [Test]
@@ -880,13 +878,13 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void IsFalse_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => BouncerClass.Instance.IsTrue(false));
+                Assert.Throws<ArgumentOutOfRangeException>(() => BrutalHack.Bouncer.Bouncer.Instance.IsTrue(false));
             }
 
             [Test]
             public void IsTrue_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => BouncerClass.Instance.IsTrue(true));
+                Assert.DoesNotThrow(() => BrutalHack.Bouncer.Bouncer.Instance.IsTrue(true));
             }
         }
     }
