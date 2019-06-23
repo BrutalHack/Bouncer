@@ -1,23 +1,59 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BrutalHack.Contracts;
-using BrutalHack.Contracts.Exceptions;
+using System.Security.Cryptography.X509Certificates;
+using BrutalHack.Bouncer;
+using BrutalHack.Bouncer.Exceptions;
 using JetBrains.Annotations;
 using NUnit.Framework;
 
-namespace Contracts.Test.ValidateTest
+namespace Bouncer.Test.BouncerTest
 {
     [TestFixture]
-    public partial class ValidateTest
+    public partial class BouncerTest
     {
         [TestFixture]
         public class IsNotNull
         {
+            private IBouncer _bouncer;
+
+            [SetUp]
+
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
             [Test]
             public void IsNull_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => Validate.IsNotNull(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, null, null));
+            }
+
+            [Test]
+            public void OneOfManyIsNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, "hi"));
+                try
+                {
+                    _bouncer.IsNotNull(null, "hi");
+                }
+                catch (ArgumentNullException e)
+                {
+                    StringAssert.Contains("Parameter #0", e.ParamName);
+                }
+
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull("hi", 5, null));
+                try
+                {
+                    _bouncer.IsNotNull("hi", 5, null);
+                }
+                catch (ArgumentNullException e)
+                {
+                    StringAssert.Contains("Parameter #2", e.ParamName);
+                }
             }
 
             [Test]
@@ -27,50 +63,158 @@ namespace Contracts.Test.ValidateTest
             [TestCase(typeof(Guid))]
             public void NotNull_ThenDoNothing(object value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNotNull(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNotNull(value));
+            }
+
+            [Test]
+            [TestCase(3, 5, 8)]
+            [TestCase(10f, 9f, 2f)]
+            [TestCase("hello", "test", "data")]
+            [TestCase(typeof(Guid), typeof(string), typeof(List))]
+            [TestCase("hello", typeof(List), 5f)]
+            public void NotNullParams_ThenDoNothing(object value1, object value2, object value3)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNull(value1, value2, value3));
+            }
+        }
+
+        [TestFixture]
+        public class IsNotNullOrEmpty
+        {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void IsNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, null, null));
+            }
+
+            [Test]
+            public void IsNullOrEmpty_ThenThrowException()
+            {
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty(""));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("", ""));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("", "", ""));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("", null, ""));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "", null));
+            }
+
+            [Test]
+            public void OneOfManyIsNullOrEmpty_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "hi"));
+                try
+                {
+                    _bouncer.IsNotNullOrEmpty(null, "hi");
+                }
+                catch (ArgumentNullException e)
+                {
+                    StringAssert.Contains("Parameter #0", e.ParamName);
+                }
+
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("hi", "test", ""));
+                try
+                {
+                    _bouncer.IsNotNullOrEmpty("hi", "test", "");
+                }
+                catch (ArgumentEmptyException e)
+                {
+                    StringAssert.Contains("Parameter #2", e.ParamName);
+                }
+            }
+
+            [Test]
+            [TestCase("hello")]
+            [TestCase(".")]
+            [TestCase(" ")]
+            [TestCase(
+                "lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. ")]
+            public void NotNullOrEmpty_ThenDoNothing(string value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value));
+            }
+
+            [Test]
+            [TestCase("hello", "test", "data")]
+            [TestCase(" ", " ", " ")]
+            public void NotNullOrEmptyParams_ThenDoNothing(string value1, string value2, string value3)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value1, value2, value3));
             }
         }
 
         [TestFixture]
         public class IsTrue
         {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
             [Test]
             public void IsFalse_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsTrue(false));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsTrue(false));
             }
 
             [Test]
             public void IsTrue_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => Validate.IsTrue(true));
+                Assert.DoesNotThrow(() => _bouncer.IsTrue(true));
             }
         }
 
         [TestFixture]
         public class IsFalse
         {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
             [Test]
             public void IsTrue_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsFalse(true));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsFalse(true));
             }
 
             [Test]
             public void IsFalse_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => Validate.IsFalse(false));
+                Assert.DoesNotThrow(() => _bouncer.IsFalse(false));
             }
         }
 
         [TestFixture]
         public class IsPositive
         {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
             [Test]
             public void IsZero_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositive(0));
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositive(0f));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositive(0));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositive(0f));
             }
 
             [Test]
@@ -79,7 +223,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue)]
             public void IsNegativeInt_ThenThrowException(int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositive(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositive(value));
             }
 
             [Test]
@@ -89,7 +233,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(-0.000000000001f)]
             public void IsNegativeFloat_ThenThrowException(float value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositive(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositive(value));
             }
 
             [Test]
@@ -98,7 +242,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MaxValue)]
             public void IsPositiveInt_ThenDoNothing(int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsPositive(value));
+                Assert.DoesNotThrow(() => _bouncer.IsPositive(value));
             }
 
             [Test]
@@ -108,18 +252,26 @@ namespace Contracts.Test.ValidateTest
             [TestCase(float.MaxValue)]
             public void IsPositiveFloat_ThenDoNothing(float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsPositive(value));
+                Assert.DoesNotThrow(() => _bouncer.IsPositive(value));
             }
         }
 
         [TestFixture]
         public class IsPositiveOrZero
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void IsZero_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => Validate.IsPositiveOrZero(0));
-                Assert.DoesNotThrow(() => Validate.IsPositiveOrZero(0f));
+                Assert.DoesNotThrow(() => _bouncer.IsPositiveOrZero(0));
+                Assert.DoesNotThrow(() => _bouncer.IsPositiveOrZero(0f));
             }
 
             [Test]
@@ -128,7 +280,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue)]
             public void IsNegativeInt_ThenThrowException(int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositiveOrZero(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositiveOrZero(value));
             }
 
             [Test]
@@ -138,7 +290,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(-0.000000000001f)]
             public void IsNegativeFloat_ThenThrowException(float value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsPositiveOrZero(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsPositiveOrZero(value));
             }
 
 
@@ -148,7 +300,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MaxValue)]
             public void IsPositiveInt_ThenDoNothing(int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsPositiveOrZero(value));
+                Assert.DoesNotThrow(() => _bouncer.IsPositiveOrZero(value));
             }
 
             [Test]
@@ -158,18 +310,26 @@ namespace Contracts.Test.ValidateTest
             [TestCase(float.MaxValue)]
             public void IsPositiveFloat_ThenDoNothing(float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsPositiveOrZero(value));
+                Assert.DoesNotThrow(() => _bouncer.IsPositiveOrZero(value));
             }
         }
 
         [TestFixture]
         public class IsNegative
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void IsZero_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegative(0));
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegative(0f));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegative(0));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegative(0f));
             }
 
             [Test]
@@ -178,7 +338,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MaxValue)]
             public void IsPositiveInt_ThenThrowException(int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegative(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegative(value));
             }
 
             [Test]
@@ -188,7 +348,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(0.000000000001f)]
             public void IsPositiveFloat_ThenThrowException(float value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegative(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegative(value));
             }
 
             [Test]
@@ -197,7 +357,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue)]
             public void IsNegativeOrZeroInt_ThenDoNothing(int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNegative(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNegative(value));
             }
 
             [Test]
@@ -207,18 +367,26 @@ namespace Contracts.Test.ValidateTest
             [TestCase(float.MinValue)]
             public void IsNegativeFloat_ThenDoNothing(float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNegative(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNegative(value));
             }
         }
 
         [TestFixture]
         public class IsNegativeOrZero
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void IsZero_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => Validate.IsNegativeOrZero(0));
-                Assert.DoesNotThrow(() => Validate.IsNegativeOrZero(0f));
+                Assert.DoesNotThrow(() => _bouncer.IsNegativeOrZero(0));
+                Assert.DoesNotThrow(() => _bouncer.IsNegativeOrZero(0f));
             }
 
             [Test]
@@ -227,7 +395,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MaxValue)]
             public void IsPositiveInt_ThenThrowException(int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegativeOrZero(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegativeOrZero(value));
             }
 
             [Test]
@@ -237,7 +405,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(0.000000000001f)]
             public void IsPositiveFloat_ThenThrowException(float value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsNegativeOrZero(value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNegativeOrZero(value));
             }
 
 
@@ -247,7 +415,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue)]
             public void IsNegativeInt_ThenDoNothing(int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNegativeOrZero(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNegativeOrZero(value));
             }
 
             [Test]
@@ -257,24 +425,32 @@ namespace Contracts.Test.ValidateTest
             [TestCase(float.MinValue)]
             public void IsNegativeFloat_ThenDoNothing(float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNegativeOrZero(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNegativeOrZero(value));
             }
         }
 
         [TestFixture]
         public class IsNotEmpty
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void IsNull_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => Validate.IsNotEmpty(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotEmpty(null));
             }
 
             [Test]
             [TestCaseSource(nameof(IsNotEmptyTestCaseData))]
             public void IsNotEmpty_ThenDoNothing(ICollection value)
             {
-                Assert.DoesNotThrow(() => Validate.IsNotEmpty(value));
+                Assert.DoesNotThrow(() => _bouncer.IsNotEmpty(value));
             }
 
             private static IEnumerable<ICollection> IsNotEmptyTestCaseData
@@ -307,7 +483,7 @@ namespace Contracts.Test.ValidateTest
             [TestCaseSource(nameof(IsEmptyTestCaseData))]
             public void IsEmpty_ThenThrowException(ICollection value)
             {
-                Assert.Throws<ArgumentEmptyException>(() => Validate.IsNotEmpty(value));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotEmpty(value));
             }
 
             private static IEnumerable<ICollection> IsEmptyTestCaseData
@@ -335,17 +511,25 @@ namespace Contracts.Test.ValidateTest
         [TestFixture]
         public class IsEmpty
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void IsNull_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => Validate.IsEmpty(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsEmpty(null));
             }
 
             [Test]
             [TestCaseSource(nameof(IsEmptyTestCaseData))]
             public void IsEmpty_ThenDoNothing(ICollection value)
             {
-                Assert.DoesNotThrow(() => Validate.IsEmpty(value));
+                Assert.DoesNotThrow(() => _bouncer.IsEmpty(value));
             }
 
             private static IEnumerable<ICollection> IsEmptyTestCaseData
@@ -373,7 +557,7 @@ namespace Contracts.Test.ValidateTest
             [TestCaseSource(nameof(IsNotEmptyTestCaseData))]
             public void IsNotEmpty_ThenThrowException(ICollection value)
             {
-                Assert.Throws<ArgumentNotEmptyException>(() => Validate.IsEmpty(value));
+                Assert.Throws<ArgumentNotEmptyException>(() => _bouncer.IsEmpty(value));
             }
 
             private static IEnumerable<ICollection> IsNotEmptyTestCaseData
@@ -405,13 +589,21 @@ namespace Contracts.Test.ValidateTest
 
         public class IsWithinRangeInt
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             [TestCase(0, -1, 0)]
             [TestCase(4223, -4224, 0)]
             [TestCase(5, 2, 0)]
             public void InvalidBoundariesInt_ThenThrowException(int min, int max, int value)
             {
-                Assert.Throws<InvalidOperationException>(() => Validate.IsWithinRange(min, max, value));
+                Assert.Throws<InvalidOperationException>(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -423,7 +615,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(3429434, int.MaxValue, int.MaxValue - 1)]
             public void IsWithinRangeInt_ThenDoNothing(int min, int max, int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsWithinRange(min, max, value));
+                Assert.DoesNotThrow(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -435,7 +627,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(3429434, int.MaxValue, 0)]
             public void IsNotWithinRangeInt_ThenDoNothing(int min, int max, int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsWithinRange(min, max, value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -446,20 +638,28 @@ namespace Contracts.Test.ValidateTest
             [TestCase(-26, 48, 48)]
             public void ValueIsOnBoundariesInt_ThenDoNothing(int min, int max, int value)
             {
-                Assert.DoesNotThrow(() => Validate.IsWithinRange(min, max, value));
+                Assert.DoesNotThrow(() => _bouncer.IsWithinRange(min, max, value));
             }
         }
 
         [TestFixture]
         public class IsWithinRangeFloat
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             [TestCase(0f, -1f, 0f)]
             [TestCase(4223f, -4224f, 0f)]
             [TestCase(5f, 2f, 0f)]
             public void InvalidBoundariesFloat_ThenThrowException(float min, float max, float value)
             {
-                Assert.Throws<InvalidOperationException>(() => Validate.IsWithinRange(min, max, value));
+                Assert.Throws<InvalidOperationException>(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -471,7 +671,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(3429434f, float.MaxValue, float.MaxValue - 1f)]
             public void IsWithinRangeFloat_ThenDoNothing(float min, float max, float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsWithinRange(min, max, value));
+                Assert.DoesNotThrow(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -483,7 +683,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(3429434f, float.MaxValue, 0f)]
             public void IsNotWithinRangeFloat_ThenDoNothing(float min, float max, float value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsWithinRange(min, max, value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsWithinRange(min, max, value));
             }
 
             [Test]
@@ -494,13 +694,21 @@ namespace Contracts.Test.ValidateTest
             [TestCase(-26f, 48f, 48f)]
             public void ValueIsOnBoundariesFloat_ThenDoNothing(float min, float max, float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsWithinRange(min, max, value));
+                Assert.DoesNotThrow(() => _bouncer.IsWithinRange(min, max, value));
             }
         }
 
         [TestFixture]
         public class IsWithinRangeExcludingBoundaries
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             [TestCase(0f, -1f, 0f)]
             [TestCase(4223f, -4224f, 0f)]
@@ -508,7 +716,7 @@ namespace Contracts.Test.ValidateTest
             public void InvalidBoundariesFloat_ThenThrowException(float min, float max, float value)
             {
                 Assert.Throws<InvalidOperationException>(() =>
-                    Validate.IsWithinRangeExcludingBoundaries(min, max, value));
+                    _bouncer.IsWithinRangeExcludingBoundaries(min, max, value));
             }
 
             [Test]
@@ -519,7 +727,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(-500f, -100f, -234f)]
             public void IsWithinRangeFloat_ThenDoNothing(float min, float max, float value)
             {
-                Assert.DoesNotThrow(() => Validate.IsWithinRangeExcludingBoundaries(min, max, value));
+                Assert.DoesNotThrow(() => _bouncer.IsWithinRangeExcludingBoundaries(min, max, value));
             }
 
             [Test]
@@ -532,7 +740,7 @@ namespace Contracts.Test.ValidateTest
             public void IsNotWithinRangeFloat_ThenDoNothing(float min, float max, float value)
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() =>
-                    Validate.IsWithinRangeExcludingBoundaries(min, max, value));
+                    _bouncer.IsWithinRangeExcludingBoundaries(min, max, value));
             }
 
             [Test]
@@ -544,17 +752,25 @@ namespace Contracts.Test.ValidateTest
             public void ValueIsOnBoundariesFloat_ThenThrowException(float min, float max, float value)
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() =>
-                    Validate.IsWithinRangeExcludingBoundaries(min, max, value));
+                    _bouncer.IsWithinRangeExcludingBoundaries(min, max, value));
             }
         }
 
         [TestFixture]
         public class Contains
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             public void NoExpectedValues_ThenThrowException()
             {
-                Assert.Throws<InvalidOperationException>(() => Validate.Contains(new int[0], 5));
+                Assert.Throws<InvalidOperationException>(() => _bouncer.Contains(new int[0], 5));
             }
 
             [Test]
@@ -569,7 +785,7 @@ namespace Contracts.Test.ValidateTest
             [TestCase(new[] {0, 0, 0, 0, 0}, 0)]
             public void IsAnExpectedValue_ThenDoNothing(int[] possibleValues, int value)
             {
-                Assert.DoesNotThrow(() => Validate.Contains(possibleValues, value));
+                Assert.DoesNotThrow(() => _bouncer.Contains(possibleValues, value));
             }
 
             [Test]
@@ -582,20 +798,28 @@ namespace Contracts.Test.ValidateTest
             [TestCase(new[] {0, 0, 0, 0, 0}, 1)]
             public void IsNotAnExpectedValue_ThenThrowException(int[] possibleValues, int value)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.Contains(possibleValues, value));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.Contains(possibleValues, value));
             }
         }
 
         [TestFixture]
         public class IsGreater
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             [TestCase(1, 0)]
             [TestCase(-2, -10)]
             [TestCase(int.MaxValue, int.MinValue)]
             public void IsGreater_ThenDoNothing(int value, int other)
             {
-                Assert.DoesNotThrow(() => Validate.IsGreater(value, other));
+                Assert.DoesNotThrow(() => _bouncer.IsGreater(value, other));
             }
 
             [Test]
@@ -604,26 +828,34 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue, int.MaxValue)]
             public void IsNotGreater_ThenThrowException(int value, int other)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsGreater(value, other));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsGreater(value, other));
             }
 
             [Test]
             public void IsEqual_ThenThrowException()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsGreater(2, 2));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsGreater(2, 2));
             }
         }
 
         [TestFixture]
         public class IsGreaterOrEqual
         {
+            private BouncerClass _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BouncerClass();
+            }
+
             [Test]
             [TestCase(1, 0)]
             [TestCase(-2, -10)]
             [TestCase(int.MaxValue, int.MinValue)]
             public void IsGreater_ThenDoNothing(int value, int other)
             {
-                Assert.DoesNotThrow(() => Validate.IsGreaterOrEqual(value, other));
+                Assert.DoesNotThrow(() => _bouncer.IsGreaterOrEqual(value, other));
             }
 
             [Test]
@@ -632,13 +864,29 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue, int.MaxValue)]
             public void IsNotGreater_ThenThrowException(int value, int other)
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => Validate.IsGreaterOrEqual(value, other));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsGreaterOrEqual(value, other));
             }
 
             [Test]
             public void IsEqual_ThenDoNothing()
             {
-                Assert.DoesNotThrow(() => Validate.IsGreaterOrEqual(2, 2));
+                Assert.DoesNotThrow(() => _bouncer.IsGreaterOrEqual(2, 2));
+            }
+        }
+
+        [TestFixture]
+        public class Singleton
+        {
+            [Test]
+            public void IsFalse_ThenThrowException()
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => BouncerClass.Instance.IsTrue(false));
+            }
+
+            [Test]
+            public void IsTrue_ThenDoNothing()
+            {
+                Assert.DoesNotThrow(() => BouncerClass.Instance.IsTrue(true));
             }
         }
     }

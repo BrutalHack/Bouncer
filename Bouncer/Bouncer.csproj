@@ -2,20 +2,21 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RootNamespace>BrutalHack.Contracts</RootNamespace>
+		<RootNamespace>BrutalHack.Bouncer</RootNamespace>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageVersion>0.2.0</PackageVersion>
-		<Title>BrutalHack.Contracts</Title>
+		<Title>Bouncer</Title>
 		<Description>Lightweight Runtime-Only Contracts for .Net Applications. Focus lies on Readability and Extensibility. Under MIT License.</Description>
 		<Copyright>Copyright 2019</Copyright>
-		<PackageProjectUrl>https://github.com/BrutalHack/Contracts</PackageProjectUrl>
-		<PackageLicenseUrl>https://github.com/BrutalHack/Contracts/blob/master/LICENSE</PackageLicenseUrl>
-		<RepositoryUrl>https://github.com/BrutalHack/Contracts</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/BrutalHack/Bouncer</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/BrutalHack/Bouncer/blob/master/LICENSE</PackageLicenseUrl>
+		<RepositoryUrl>https://github.com/BrutalHack/Bouncer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>contract, validate, check, runtime, argument, parameter, constraint</PackageTags>
-		<PackageReleaseNotes>Added various generic constraints.</PackageReleaseNotes>
-		<PackageId>BrutalHack.Contracts</PackageId>
+		<PackageReleaseNotes>Renamed Project, made non-static for IoC containers and Extension Methods</PackageReleaseNotes>
+		<PackageId>BrutalHack.Bouncer</PackageId>
 		<Authors>BrutalHack</Authors>
+		<AssemblyName>Bouncer</AssemblyName>
 	</PropertyGroup>
 
 </Project>
