@@ -1,6 +1,6 @@
 using System;
 
-namespace BrutalHack.Contracts.Exceptions
+namespace BrutalHack.Bouncer.Exceptions
 {
     public class ArgumentNotEmptyException : ArgumentException
     {

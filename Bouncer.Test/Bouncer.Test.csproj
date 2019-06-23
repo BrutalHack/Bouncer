@@ -2,6 +2,10 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<AssemblyName>Bouncer.Test</AssemblyName>
+		<RootNamespace>Bouncer.Test</RootNamespace>
+		<PackageId>Bouncer.Test</PackageId>
+		<Authors>Bouncer.Test</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Contracts\Contracts.csproj" />
+	  <ProjectReference Include="..\Bouncer\Bouncer.csproj" />
 	</ItemGroup>
 
 </Project>

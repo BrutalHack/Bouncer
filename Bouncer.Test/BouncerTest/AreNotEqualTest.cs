@@ -1,20 +1,28 @@
 using System;
 using System.Collections.Generic;
-using BrutalHack.Contracts;
+using BrutalHack.Bouncer;
 using JetBrains.Annotations;
 using NUnit.Framework;
 
-namespace Contracts.Test.ValidateTest
+namespace Bouncer.Test.BouncerTest
 {
-    public partial class ValidateTest
+    public partial class BouncerTest
     {
         [TestFixture]
-        public class AreEqual
+        public class AreNotEqual
         {
-            [Test]
-            public void NullAndNull_ThenDoNothing()
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
             {
-                Assert.DoesNotThrow(() => Validate.AreEqual(null, null));
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void NullAndNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(null, null));
             }
 
             [Test]
@@ -22,9 +30,9 @@ namespace Contracts.Test.ValidateTest
             [TestCase(6)]
             [TestCase(-2381)]
             [TestCase(int.MaxValue)]
-            public void AreEqualInt_ThenDoNothing(int value)
+            public void AreEqualInt_ThenThrowException(int value)
             {
-                Assert.DoesNotThrow(() => Validate.AreEqual(value, value));
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(value, value));
             }
 
             [Test]
@@ -32,16 +40,16 @@ namespace Contracts.Test.ValidateTest
             [TestCase(6f)]
             [TestCase(-2381f)]
             [TestCase(float.MaxValue)]
-            public void AreEqualFloat_ThenDoNothing(float value)
+            public void AreEqualFloat_ThenThrowException(float value)
             {
-                Assert.DoesNotThrow(() => Validate.AreEqual(value, value));
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(value, value));
             }
-            
+
             [Test]
             [TestCaseSource(nameof(AreEqualObjectTestData))]
             public void AreEqualObject_ThenThrowException(AreEqualObjectTestCase testCaseData)
             {
-                Assert.DoesNotThrow(() => Validate.AreEqual(testCaseData.Value, testCaseData.Value));
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(testCaseData.Value, testCaseData.Value));
             }
 
             public class AreEqualObjectTestCase
@@ -87,9 +95,9 @@ namespace Contracts.Test.ValidateTest
             [TestCase(int.MinValue, int.MaxValue)]
             [TestCase(45351, 398)]
             [TestCase(-45351, -398)]
-            public void AreNotEqualInt_ThenThrowException(int expected, int value)
+            public void AreNotEqualInt_ThenDoNothing(int expected, int value)
             {
-                Assert.Throws<ArgumentException>(() => Validate.AreEqual(expected, value));
+                Assert.DoesNotThrow(() => _bouncer.AreNotEqual(expected, value));
             }
 
             [Test]
@@ -99,16 +107,16 @@ namespace Contracts.Test.ValidateTest
             [TestCase(float.MinValue, float.MaxValue)]
             [TestCase(45351f, 398f)]
             [TestCase(-45351f, -398f)]
-            public void AreNotEqualFloat_ThenThrowException(float expected, float value)
+            public void AreNotEqualFloat_ThenDoNothing(float expected, float value)
             {
-                Assert.Throws<ArgumentException>(() => Validate.AreEqual(expected, value));
+                Assert.DoesNotThrow(() => _bouncer.AreNotEqual(expected, value));
             }
 
             [Test]
             [TestCaseSource(nameof(AreNotEqualObjectTestData))]
-            public void AreNotEqualObject_ThenThrowException(AreNotEqualObjectTestCase testCaseData)
+            public void AreNotEqualObject_ThenDoNothing(AreNotEqualObjectTestCase testCaseData)
             {
-                Assert.Throws<ArgumentException>(() => Validate.AreEqual(testCaseData.Expected, testCaseData.Value));
+                Assert.DoesNotThrow(() => _bouncer.AreNotEqual(testCaseData.Expected, testCaseData.Value));
             }
 
             public class AreNotEqualObjectTestCase
@@ -117,7 +125,7 @@ namespace Contracts.Test.ValidateTest
                 public object Value;
             }
 
-            public static IEnumerable<object> AreNotEqualObjectTestData
+            private static IEnumerable<object> AreNotEqualObjectTestData
             {
                 [UsedImplicitly]
                 get
@@ -151,8 +159,8 @@ namespace Contracts.Test.ValidateTest
                         },
                         new AreNotEqualObjectTestCase
                         {
-                        Expected = null,
-                        Value = "one"
+                            Expected = null,
+                            Value = "one"
                         }
                     };
 
@@ -162,8 +170,6 @@ namespace Contracts.Test.ValidateTest
                     }
                 }
             }
-
-            
         }
     }
 }
