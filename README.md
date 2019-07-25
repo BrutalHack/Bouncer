@@ -9,32 +9,33 @@ When a constraint is violated, you receive a readable exception including stack 
 
 ### with Bouncer
 ```cs
-protected Tile(int cornerCount, float outerRadius, Vector2Int position, int height, float heightFactor = 1f)
+IBouncer Bouncer;
+
+public CreateNewUser(string name, int age)
 {
-  Bouncer.IsPositive(cornerCount);
-  Bouncer.IsPositive(outerRadius);
-  Bouncer.IsPositiveOrZero(height);
-  Bouncer.IsPositive(heightFactor);
+  Bouncer.IsNotNullOrEmpty(name);
+  Bouncer.IsPositive(age)
   // Do Stuff
 }
 ```
 
 ### without Bouncer
 ```cs
-protected Tile(int cornerCount, float outerRadius, Vector2Int position, int height, float heightFactor = 1f)
+public CreateNewUser(string name, int age)
 {
-  if (cornerCount > 0){
-    throw new ArgumentOutOfRangeException("cornerCount must be > 0");
+  if (name == null)
+  {
+    throw new ArgumentNullException(nameof(name), "Must not be null.");
   }
-  if (outerRadius > 0){
-    throw new ArgumentOutOfRangeException("outerRadius must be > 0");
+  if (name.length == 0)
+  {
+    throw new ArgumentOutOfRangeException(nameof(name), "Must not be empty.");
   }
-  if (height >= 0){
-    throw new ArgumentOutOfRangeException("height must be >= 0");
+  if (age < 0)
+  (
+    throw new ArgumentOutOfRangeException(nameof(age), "Must be positive.");
   }
-  if (heightFactor > 0){
-    throw new ArgumentOutOfRangeException("heightFactor must be > 0");
-  }
+  
   // Do Stuff
 }
 ```
