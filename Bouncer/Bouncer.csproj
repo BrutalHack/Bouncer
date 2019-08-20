@@ -4,16 +4,16 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<RootNamespace>BrutalHack.Bouncer</RootNamespace>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageVersion>0.2.0</PackageVersion>
+		<PackageVersion>0.4.1</PackageVersion>
 		<Title>Bouncer</Title>
-		<Description>Lightweight Runtime-Only Contracts for .Net Applications. Focus lies on Readability and Extensibility. Under MIT License.</Description>
+		<Description>Lightweight Runtime-Only Contracts for .Net Standard 2.0. Focus lies on Readability and Extensibility. Under MIT License.</Description>
 		<Copyright>Copyright 2019</Copyright>
 		<PackageProjectUrl>https://github.com/BrutalHack/Bouncer</PackageProjectUrl>
 		<PackageLicenseUrl>https://github.com/BrutalHack/Bouncer/blob/master/LICENSE</PackageLicenseUrl>
 		<RepositoryUrl>https://github.com/BrutalHack/Bouncer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>contract, validate, check, runtime, argument, parameter, constraint</PackageTags>
-		<PackageReleaseNotes>Renamed Project, made non-static for IoC containers and Extension Methods</PackageReleaseNotes>
+		<PackageReleaseNotes>Added Bouncer.IsNullOrWhitespace(params string[]); Fixed small issue in an Exception Message.</PackageReleaseNotes>
 		<PackageId>BrutalHack.Bouncer</PackageId>
 		<Authors>BrutalHack</Authors>
 		<AssemblyName>Bouncer</AssemblyName>
