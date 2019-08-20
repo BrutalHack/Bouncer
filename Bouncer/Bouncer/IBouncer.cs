@@ -15,15 +15,20 @@ namespace BrutalHack.Bouncer
         /// <exception cref="ArgumentEmptyException"></exception>
         void IsNotEmpty(ICollection collection);
 
+        /// <param name="collection"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentEmptyException"></exception>
+        void IsEmpty(ICollection collection);
+
         /// <param name="values"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
         void IsNotNullOrEmpty(params string[] values);
 
-        /// <param name="collection"></param>
+        /// <param name="values"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
-        void IsEmpty(ICollection collection);
+        void IsNotNullOrWhiteSpace(params string[] values);
 
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
