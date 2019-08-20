@@ -2,6 +2,12 @@
 Bouncer provides lightweight runtime-only "contracts" for .Net applications. 
 Focus lies on readability and extensibility.
 
+# Build Status
+
+| Framework | Status|
+|--|--|
+| .Net Core 2.1 | [![Build Status](https://travis-ci.org/BrutalHack/Bouncer.svg?branch=master)](https://travis-ci.org/BrutalHack/Bouncer) |
+
 ## Usage
 
 Import the Nuget Package and check constraints for your methods parameters in a few readable lines.
