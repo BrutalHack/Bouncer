@@ -46,6 +46,22 @@ namespace BrutalHack.Bouncer
             }
         }
 
+        /// <param name="collection"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentEmptyException"></exception>
+        public void IsEmpty(ICollection collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (collection.Count > 0)
+            {
+                throw new ArgumentNotEmptyException();
+            }
+        }
+
         /// <param name="values"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
@@ -70,19 +86,27 @@ namespace BrutalHack.Bouncer
             }
         }
 
-        /// <param name="collection"></param>
+        /// <param name="values"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
-        public void IsEmpty(ICollection collection)
+        public void IsNotNullOrWhiteSpace(params string[] values)
         {
-            if (collection == null)
+            if (values == null)
             {
                 throw new ArgumentNullException();
             }
 
-            if (collection.Count > 0)
+            for (var index = 0; index < values.Length; index++)
             {
-                throw new ArgumentNotEmptyException();
+                if (values[index] == null)
+                {
+                    throw new ArgumentNullException($"Parameter #{index} (Starting at 0)");
+                }
+
+                if (string.IsNullOrWhiteSpace(values[index]))
+                {
+                    throw new ArgumentEmptyException($"Parameter #{index} (Starting at 0)");
+                }
             }
         }
 
@@ -252,7 +276,8 @@ namespace BrutalHack.Bouncer
 
             if (!expectedValues.Contains(value))
             {
-                throw new ArgumentOutOfRangeException($"Expected values are: {expectedValues}! Current: {value}");
+                var joinedExpectedValues = string.Join(", ", expectedValues);
+                throw new ArgumentOutOfRangeException($"Expected values are: {joinedExpectedValues}! Current: {value}");
             }
         }
 
