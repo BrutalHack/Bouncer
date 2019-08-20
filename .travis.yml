@@ -1,0 +1,12 @@
+language: csharp
+solution: Bouncer.sln
+
+matrix:
+  include:
+    - dotnet: 2.1.502
+      mono: none
+    - mono: latest
+
+script:
+  - dotnet restore
+  - dotnet test
