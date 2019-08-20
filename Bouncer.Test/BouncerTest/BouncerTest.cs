@@ -133,8 +133,7 @@ namespace Bouncer.Test.BouncerTest
             [TestCase("hello")]
             [TestCase(".")]
             [TestCase(" ")]
-            [TestCase(
-                "lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. ")]
+            [TestCase("lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet.  ")]
             public void NotNullOrEmpty_ThenDoNothing(string value)
             {
                 Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value));
@@ -146,6 +145,90 @@ namespace Bouncer.Test.BouncerTest
             public void NotNullOrEmptyParams_ThenDoNothing(string value1, string value2, string value3)
             {
                 Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value1, value2, value3));
+            }
+        }
+
+        [TestFixture]
+        public class IsNotNullOrWhiteSpace
+        {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void IsNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, null, null));
+            }
+
+            [Test]
+            public void IsNullOrWhiteSpace_ThenThrowException()
+            {
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace(""));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace(" "));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("", ""));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace(" ", " "));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("", null));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace(" ", null));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, ""));
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, " "));
+            }
+
+            [Test]
+            public void OneOfManyIsNullOrWhiteSpace_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, "hi"));
+                try
+                {
+                    _bouncer.IsNotNullOrWhiteSpace(null, "hi");
+                }
+                catch (ArgumentNullException e)
+                {
+                    StringAssert.Contains("Parameter #0", e.ParamName);
+                }
+
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "", "test"));
+                try
+                {
+                    _bouncer.IsNotNullOrWhiteSpace("hi", "", "test");
+                }
+                catch (ArgumentEmptyException e)
+                {
+                    StringAssert.Contains("Parameter #1", e.ParamName);
+                }
+
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "test", " "));
+                try
+                {
+                    _bouncer.IsNotNullOrWhiteSpace("hi", "test", " ");
+                }
+                catch (ArgumentEmptyException e)
+                {
+                    StringAssert.Contains("Parameter #2", e.ParamName);
+                }
+            }
+
+            [Test]
+            [TestCase("hello")]
+            [TestCase(".")]
+            [TestCase("lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet.  ")]
+            public void NotNullOrWhiteSpace_ThenDoNothing(string value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrWhiteSpace(value));
+            }
+
+            [Test]
+            [TestCase("hello", "test", "data")]
+            [TestCase(".", ".", ".")]
+            public void NotNullOrWhiteSpaceParams_ThenDoNothing(string value1, string value2, string value3)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrWhiteSpace(value1, value2, value3));
             }
         }
 
