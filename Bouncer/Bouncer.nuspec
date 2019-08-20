@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Bouncer</id>
-    <version>0.2.0</version>
+    <version>0.4.1</version>
     <title>BrutalHack.Bouncer</title>
     <authors>BrutalHack</authors>
     <owners>BrutalHack</owners>
@@ -10,7 +10,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/BrutalHack/Bouncer</projectUrl>
     <description>Lightweight Runtime-Only Bouncer for .Net Applications. Focus lies on Readability and Extensibility. Under MIT License.</description>
-    <releaseNotes>Added various generic constraints.</releaseNotes>
+    <releaseNotes>Added Bouncer.IsNullOrWhitespace(params string[]); Fixed small issue in an Exception Message.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>contract, validate, check, runtime, argument, parameter, constraint</tags>
     <repository type="git" url="https://github.com/BrutalHack/Bouncer" />
