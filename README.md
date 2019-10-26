@@ -1,6 +1,8 @@
 Bouncer provides lightweight runtime-only "contracts" for .Net applications. 
 Focus lies on readability and extensibility.
 
+[![Travis (.org)](https://img.shields.io/travis/BrutalHack/Bouncer)](https://travis-ci.org/BrutalHack/Bouncer) [![Nuget](https://img.shields.io/nuget/v/BrutalHack.Bouncer?color=green)](https://www.nuget.org/packages/BrutalHack.Bouncer/) [![Discord](https://img.shields.io/discord/371412787731103746?label=Discord)](https://discord.gg/4FmEwGp)
+
 - [Build Status](#build-status)
 - [Usage](#usage)
   * [with Bouncer](#with-bouncer)
@@ -9,12 +11,6 @@ Focus lies on readability and extensibility.
   * [Using Extension Methods](#using-extension-methods)
   * [Using IsTrue](#using-istrue)
 - [Planned Features](#planned-features)
-
-# Build Status
-
-| Framework | Status|
-|--|--|
-| .Net Core 2.1 | [![Build Status](https://travis-ci.org/BrutalHack/Bouncer.svg?branch=master)](https://travis-ci.org/BrutalHack/Bouncer) |
 
 # Usage
 
