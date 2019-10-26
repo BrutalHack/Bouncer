@@ -1,5 +1,5 @@
 Bouncer provides lightweight runtime-only "contracts" for .Net applications. 
-Focus lies on readability and extensibility.
+Focus lies on readability, extensibility and a high unit test coverage.
 
 [![Travis (.org)](https://img.shields.io/travis/BrutalHack/Bouncer)](https://travis-ci.org/BrutalHack/Bouncer) [![Nuget](https://img.shields.io/nuget/v/BrutalHack.Bouncer?color=green)](https://www.nuget.org/packages/BrutalHack.Bouncer/) [![Discord](https://img.shields.io/discord/371412787731103746?label=Discord)](https://discord.gg/4FmEwGp)
 
