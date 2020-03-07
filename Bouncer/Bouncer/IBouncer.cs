@@ -10,10 +10,13 @@ namespace BrutalHack.Bouncer
         /// <exception cref="ArgumentNullException"></exception>
         void IsNotNull(params object[] values);
 
+        [Obsolete("IsNotEmpty is deprecated, please use IsNotNullOrEmpty instead.", false)]
+        void IsNotEmpty(ICollection collection);
+
         /// <param name="collection"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
-        void IsNotEmpty(ICollection collection);
+        void IsNotNullOrEmpty(ICollection collection);
 
         /// <param name="collection"></param>
         /// <exception cref="ArgumentNullException"></exception>
