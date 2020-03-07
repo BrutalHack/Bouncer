@@ -33,25 +33,11 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNull_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNull(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, "hi"));
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull("hi", 5, null));
-                try
-                {
-                    _bouncer.IsNotNull("hi", 5, null);
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter2Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull("hi", 5, null));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
@@ -108,25 +94,13 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNullOrEmpty_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNullOrEmpty(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception =
+                    Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "hi"));
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("hi", "test", ""));
-                try
-                {
-                    _bouncer.IsNotNullOrEmpty("hi", "test", "");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter2Exception =
+                    Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("hi", "test", ""));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
@@ -183,35 +157,15 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNullOrWhiteSpace_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, "hi"));
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "", "test"));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace("hi", "", "test");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #1", e.ParamName);
-                }
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "test", " "));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace("hi", "test", " ");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter1Exception = Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "", "test"));
+                StringAssert.Contains("Parameter #1", parameter1Exception.ParamName);
+
+                var parameter2Exception = Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "test", " "));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
