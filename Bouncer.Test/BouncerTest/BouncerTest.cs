@@ -77,7 +77,7 @@ namespace Bouncer.Test.BouncerTest
         }
 
         [TestFixture]
-        public class IsNotNullOrEmpty
+        public class IsNotNullOrEmptyOnValues
         {
             private IBouncer _bouncer;
 
@@ -534,6 +534,13 @@ namespace Bouncer.Test.BouncerTest
                 Assert.DoesNotThrow(() => _bouncer.IsNotEmpty(value));
             }
 
+            [Test]
+            [TestCaseSource(nameof(IsEmptyTestCaseData))]
+            public void IsEmpty_ThenThrowException(ICollection value)
+            {
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotEmpty(value));
+            }
+
             private static IEnumerable<ICollection> IsNotEmptyTestCaseData
             {
                 [UsedImplicitly]
@@ -560,11 +567,83 @@ namespace Bouncer.Test.BouncerTest
                 }
             }
 
+            private static IEnumerable<ICollection> IsEmptyTestCaseData
+            {
+                [UsedImplicitly]
+                get
+                {
+                    var testCaseList = new List<ICollection>
+                    {
+                        new List<int>(),
+                        new Dictionary<int, string>(),
+                        new SortedSet<float>(),
+                        new object[0],
+                        new Stack<int>()
+                    };
+
+                    foreach (var collection in testCaseList)
+                    {
+                        yield return collection;
+                    }
+                }
+            }
+        }
+
+        [TestFixture]
+        public class IsNotNullOrEmptyOnCollection
+        {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void IsNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null));
+            }
+
+            [Test]
+            [TestCaseSource(nameof(IsNotEmptyTestCaseData))]
+            public void IsNotEmpty_ThenDoNothing(ICollection value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value));
+            }
+
             [Test]
             [TestCaseSource(nameof(IsEmptyTestCaseData))]
             public void IsEmpty_ThenThrowException(ICollection value)
             {
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotEmpty(value));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty(value));
+            }
+
+            private static IEnumerable<ICollection> IsNotEmptyTestCaseData
+            {
+                [UsedImplicitly]
+                get
+                {
+                    var testCaseList = new List<ICollection>
+                    {
+                        new List<int> {1},
+                        new Dictionary<int, string>
+                        {
+                            {0, "one"},
+                            {219, "two"}
+                        },
+                        new SortedSet<float> {0f, 4f, 5f},
+                        new[] {'a', 'd'},
+                        new object[] {Guid.Empty, "hello", 4},
+                        new Stack<int>(new[] {1, 4, 6, 3, 5, 6, 2, 234, 8})
+                    };
+
+                    foreach (var collection in testCaseList)
+                    {
+                        yield return collection;
+                    }
+                }
             }
 
             private static IEnumerable<ICollection> IsEmptyTestCaseData
