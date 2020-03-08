@@ -30,10 +30,16 @@ namespace BrutalHack.Bouncer
             }
         }
 
+        [Obsolete("IsNotEmpty is deprecated, please use IsNotNullOrEmpty instead.", false)]
+        public void IsNotEmpty(ICollection collection)
+        {
+            IsNotNullOrEmpty(collection);
+        }
+
         /// <param name="collection"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentEmptyException"></exception>
-        public void IsNotEmpty(ICollection collection)
+        public void IsNotNullOrEmpty(ICollection collection)
         {
             if (collection == null)
             {

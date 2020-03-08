@@ -33,25 +33,11 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNull_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNull(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull(null, "hi"));
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull("hi", 5, null));
-                try
-                {
-                    _bouncer.IsNotNull("hi", 5, null);
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter2Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNull("hi", 5, null));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
@@ -77,7 +63,7 @@ namespace Bouncer.Test.BouncerTest
         }
 
         [TestFixture]
-        public class IsNotNullOrEmpty
+        public class IsNotNullOrEmptyOnValues
         {
             private IBouncer _bouncer;
 
@@ -108,25 +94,13 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNullOrEmpty_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNullOrEmpty(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception =
+                    Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null, "hi"));
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("hi", "test", ""));
-                try
-                {
-                    _bouncer.IsNotNullOrEmpty("hi", "test", "");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter2Exception =
+                    Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty("hi", "test", ""));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
@@ -183,35 +157,15 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             public void OneOfManyIsNullOrWhiteSpace_ThenThrowException()
             {
-                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, "hi"));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace(null, "hi");
-                }
-                catch (ArgumentNullException e)
-                {
-                    StringAssert.Contains("Parameter #0", e.ParamName);
-                }
+                var parameter0Exception = Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrWhiteSpace(null, "hi"));
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "", "test"));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace("hi", "", "test");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #1", e.ParamName);
-                }
+                StringAssert.Contains("Parameter #0", parameter0Exception.ParamName);
 
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "test", " "));
-                try
-                {
-                    _bouncer.IsNotNullOrWhiteSpace("hi", "test", " ");
-                }
-                catch (ArgumentEmptyException e)
-                {
-                    StringAssert.Contains("Parameter #2", e.ParamName);
-                }
+                var parameter1Exception = Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "", "test"));
+                StringAssert.Contains("Parameter #1", parameter1Exception.ParamName);
+
+                var parameter2Exception = Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrWhiteSpace("hi", "test", " "));
+                StringAssert.Contains("Parameter #2", parameter2Exception.ParamName);
             }
 
             [Test]
@@ -534,6 +488,13 @@ namespace Bouncer.Test.BouncerTest
                 Assert.DoesNotThrow(() => _bouncer.IsNotEmpty(value));
             }
 
+            [Test]
+            [TestCaseSource(nameof(IsEmptyTestCaseData))]
+            public void IsEmpty_ThenThrowException(ICollection value)
+            {
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotEmpty(value));
+            }
+
             private static IEnumerable<ICollection> IsNotEmptyTestCaseData
             {
                 [UsedImplicitly]
@@ -560,11 +521,83 @@ namespace Bouncer.Test.BouncerTest
                 }
             }
 
+            private static IEnumerable<ICollection> IsEmptyTestCaseData
+            {
+                [UsedImplicitly]
+                get
+                {
+                    var testCaseList = new List<ICollection>
+                    {
+                        new List<int>(),
+                        new Dictionary<int, string>(),
+                        new SortedSet<float>(),
+                        new object[0],
+                        new Stack<int>()
+                    };
+
+                    foreach (var collection in testCaseList)
+                    {
+                        yield return collection;
+                    }
+                }
+            }
+        }
+
+        [TestFixture]
+        public class IsNotNullOrEmptyOnCollection
+        {
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void IsNull_ThenThrowException()
+            {
+                Assert.Throws<ArgumentNullException>(() => _bouncer.IsNotNullOrEmpty(null));
+            }
+
+            [Test]
+            [TestCaseSource(nameof(IsNotEmptyTestCaseData))]
+            public void IsNotEmpty_ThenDoNothing(ICollection value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotNullOrEmpty(value));
+            }
+
             [Test]
             [TestCaseSource(nameof(IsEmptyTestCaseData))]
             public void IsEmpty_ThenThrowException(ICollection value)
             {
-                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotEmpty(value));
+                Assert.Throws<ArgumentEmptyException>(() => _bouncer.IsNotNullOrEmpty(value));
+            }
+
+            private static IEnumerable<ICollection> IsNotEmptyTestCaseData
+            {
+                [UsedImplicitly]
+                get
+                {
+                    var testCaseList = new List<ICollection>
+                    {
+                        new List<int> {1},
+                        new Dictionary<int, string>
+                        {
+                            {0, "one"},
+                            {219, "two"}
+                        },
+                        new SortedSet<float> {0f, 4f, 5f},
+                        new[] {'a', 'd'},
+                        new object[] {Guid.Empty, "hello", 4},
+                        new Stack<int>(new[] {1, 4, 6, 3, 5, 6, 2, 234, 8})
+                    };
+
+                    foreach (var collection in testCaseList)
+                    {
+                        yield return collection;
+                    }
+                }
             }
 
             private static IEnumerable<ICollection> IsEmptyTestCaseData
