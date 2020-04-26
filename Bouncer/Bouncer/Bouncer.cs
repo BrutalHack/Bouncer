@@ -198,6 +198,26 @@ namespace BrutalHack.Bouncer
 
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void IsNotZero(int value)
+        {
+            if (value == 0)
+            {
+                throw new ArgumentOutOfRangeException($"Value can't be zero! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void IsNotZero(float value)
+        {
+            if (Epsilon > value && value > -Epsilon)
+            {
+                throw new ArgumentOutOfRangeException($"Value can't be zero! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void IsTrue(bool value)
         {
             if (!value)

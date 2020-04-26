@@ -67,6 +67,14 @@ namespace BrutalHack.Bouncer
 
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        void IsNotZero(int value);
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        void IsNotZero(float value);
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         void IsTrue(bool value);
 
         /// <param name="value"></param>
