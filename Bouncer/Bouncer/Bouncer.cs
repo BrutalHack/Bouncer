@@ -210,9 +210,11 @@ namespace BrutalHack.Bouncer
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void IsNotZero(float value, float epsilon = Constant.Epsilon)
         {
-            if (epsilon > value && value > -epsilon)
+            var distance = Math.Abs(value);
+            if (distance <= epsilon)
             {
-                throw new ArgumentOutOfRangeException($"Value can't be zero! Current: {value}");
+                throw new ArgumentOutOfRangeException(
+                    $"Value can't be zero! Current: {value} Epsilon: {epsilon} Distance: {distance}");
             }
         }
 
