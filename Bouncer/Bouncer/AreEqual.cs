@@ -39,10 +39,12 @@ namespace BrutalHack.Bouncer
         /// <exception cref="ArgumentException"></exception>
         public void AreEqual(float expected, float value, float epsilon = Constant.Epsilon)
         {
-            if (Math.Abs(expected - value) > epsilon)
+            var distance = Math.Abs(expected - value);
+            if (distance > epsilon)
             {
-                throw new ArgumentException($"Expected: {expected}, actual {value}.");
+                throw new ArgumentException(
+                    $"Expected: {expected} Actual: {value} Epsilon: {epsilon} Distance: {distance}");
             }
-        }        
+        }
     }
 }
