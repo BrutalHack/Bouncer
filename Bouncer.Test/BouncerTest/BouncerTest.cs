@@ -465,6 +465,103 @@ namespace Bouncer.Test.BouncerTest
         }
 
         [TestFixture]
+        public class IsNotZero
+        {
+            private const float CustomEpsilon = 0.1f;
+            private IBouncer _bouncer;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _bouncer = new BrutalHack.Bouncer.Bouncer();
+            }
+
+            [Test]
+            public void IsZeroInt_ThenThrowException()
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNotZero(0));
+            }
+
+            [Test]
+            [TestCase(0f)]
+            [TestCase(0.00005f)]
+            [TestCase(-0.00005f)]
+            public void IsZeroFloat_ThenThrowException(float value)
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNotZero(0f));
+            }
+
+            [Test]
+            [TestCase(0f)]
+            [TestCase(0.05f)]
+            [TestCase(-0.05f)]
+            public void IsZeroCustomFloat_ThenThrowException(float value)
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => _bouncer.IsNotZero(0f, CustomEpsilon));
+            }
+
+            [Test]
+            [TestCase(1)]
+            [TestCase(5)]
+            [TestCase(int.MaxValue)]
+            public void IsPositiveInt_ThenDoNothing(int value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value));
+            }
+
+            [Test]
+            [TestCase(1f)]
+            [TestCase(0.0005f)]
+            [TestCase(0.005f)]
+            [TestCase(82f)]
+            [TestCase(float.MaxValue)]
+            public void IsPositiveFloat_ThenDoNothing(float value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value));
+            }
+
+            [Test]
+            [TestCase(1f)]
+            [TestCase(0.5f)]
+            [TestCase(82f)]
+            [TestCase(float.MaxValue)]
+            public void IsPositiveCustomFloat_ThenDoNothing(float value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value, CustomEpsilon));
+            }
+
+            [Test]
+            [TestCase(-1)]
+            [TestCase(-4)]
+            [TestCase(int.MinValue)]
+            public void IsNegativeInt_ThenDoNothing(int value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value));
+            }
+
+            [Test]
+            [TestCase(-1f)]
+            [TestCase(-0.0005f)]
+            [TestCase(-0.005f)]
+            [TestCase(-75f)]
+            [TestCase(float.MinValue)]
+            public void IsNegativeFloat_ThenDoNothing(float value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value));
+            }
+            
+            [Test]
+            [TestCase(-1f)]
+            [TestCase(-0.5f)]
+            [TestCase(-75f)]
+            [TestCase(float.MinValue)]
+            public void IsNegativeCustomFloat_ThenDoNothing(float value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.IsNotZero(value, CustomEpsilon));
+            }
+        }
+
+        [TestFixture]
         public class IsNotEmpty
         {
             private IBouncer _bouncer;

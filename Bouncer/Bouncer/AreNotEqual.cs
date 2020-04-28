@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using BrutalHack.Bouncer.Constants;
 using BrutalHack.Bouncer.Exceptions;
 
 namespace BrutalHack.Bouncer
@@ -40,12 +41,13 @@ namespace BrutalHack.Bouncer
         /// <param name="value"></param>
         /// <param name="epsilon"></param>
         /// <exception cref="ArgumentException"></exception>
-        public void AreNotEqual(float notExpected, float value, float epsilon = Epsilon)
+        public void AreNotEqual(float notExpected, float value, float epsilon = Constant.Epsilon)
         {
-            if (Math.Abs(notExpected - value) <= Bouncer.Epsilon)
+            var distance = Math.Abs(notExpected - value);
+            if (distance <= epsilon)
             {
                 throw new ArgumentException(
-                    $"Value was not expected to be: {notExpected}, actual {value}. Using epsilon {epsilon}");
+                    $"NotExpected: {notExpected} Actual: {value} Epsilon: {epsilon} Distance: {distance}");
             }
         }
     }

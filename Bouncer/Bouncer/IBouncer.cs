@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using BrutalHack.Bouncer.Constants;
 using BrutalHack.Bouncer.Exceptions;
 
 namespace BrutalHack.Bouncer
@@ -67,6 +68,15 @@ namespace BrutalHack.Bouncer
 
         /// <param name="value"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        void IsNotZero(int value);
+
+        /// <param name="value"></param>
+        /// /// <param name="epsilon"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        void IsNotZero(float value, float epsilon = Constant.Epsilon);
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         void IsTrue(bool value);
 
         /// <param name="value"></param>
@@ -117,7 +127,7 @@ namespace BrutalHack.Bouncer
         /// <param name="value"></param>
         /// <param name="epsilon"></param>
         /// <exception cref="ArgumentException"></exception>
-        void AreNotEqual(float notExpected, float value, float epsilon = Bouncer.Epsilon);
+        void AreNotEqual(float notExpected, float value, float epsilon = Constant.Epsilon);
 
         /// <param name="expected"></param>
         /// <param name="value"></param>
@@ -128,7 +138,8 @@ namespace BrutalHack.Bouncer
 
         /// <param name="expected"></param>
         /// <param name="value"></param>
+        /// <param name="epsilon"></param>
         /// <exception cref="ArgumentException"></exception>
-        void AreEqual(float expected, float value, float epsilon = Bouncer.Epsilon);
+        void AreEqual(float expected, float value, float epsilon = Constant.Epsilon);
     }
 }

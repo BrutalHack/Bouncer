@@ -1,4 +1,5 @@
 using System;
+using BrutalHack.Bouncer.Constants;
 
 namespace BrutalHack.Bouncer
 {
@@ -36,12 +37,14 @@ namespace BrutalHack.Bouncer
         /// <param name="expected"></param>
         /// <param name="value"></param>
         /// <exception cref="ArgumentException"></exception>
-        public void AreEqual(float expected, float value, float epsilon = Epsilon)
+        public void AreEqual(float expected, float value, float epsilon = Constant.Epsilon)
         {
-            if (Math.Abs(expected - value) > Epsilon)
+            var distance = Math.Abs(expected - value);
+            if (distance > epsilon)
             {
-                throw new ArgumentException($"Expected: {expected}, actual {value}.");
+                throw new ArgumentException(
+                    $"Expected: {expected} Actual: {value} Epsilon: {epsilon} Distance: {distance}");
             }
-        }        
+        }
     }
 }

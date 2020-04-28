@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using BrutalHack.Bouncer.Constants;
 using BrutalHack.Bouncer.Exceptions;
 
 #pragma warning disable 659
@@ -9,8 +10,6 @@ namespace BrutalHack.Bouncer
 {
     public partial class Bouncer : IBouncer
     {
-        public const float Epsilon = 0.0001f;
-
         /// <param name="values"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public void IsNotNull(params object[] values)
@@ -193,6 +192,29 @@ namespace BrutalHack.Bouncer
             if (value > 0)
             {
                 throw new ArgumentOutOfRangeException($"Value can't be positive! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void IsNotZero(int value)
+        {
+            if (value == 0)
+            {
+                throw new ArgumentOutOfRangeException($"Value can't be zero! Current: {value}");
+            }
+        }
+
+        /// <param name="value"></param>
+        /// <param name="epsilon"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void IsNotZero(float value, float epsilon = Constant.Epsilon)
+        {
+            var distance = Math.Abs(value);
+            if (distance <= epsilon)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"Value can't be zero! Current: {value} Epsilon: {epsilon} Distance: {distance}");
             }
         }
 

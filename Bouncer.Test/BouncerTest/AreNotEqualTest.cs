@@ -11,6 +11,7 @@ namespace Bouncer.Test.BouncerTest
         [TestFixture]
         public class AreNotEqual
         {
+            private const float CustomEpsilon = 0.1f;
             private IBouncer _bouncer;
 
             [SetUp]
@@ -36,13 +37,27 @@ namespace Bouncer.Test.BouncerTest
             }
 
             [Test]
-            [TestCase(0f)]
-            [TestCase(6f)]
-            [TestCase(-2381f)]
-            [TestCase(float.MaxValue)]
-            public void AreEqualFloat_ThenThrowException(float value)
+            [TestCase(0f, 0f)]
+            [TestCase(6f, 6.00005f)]
+            [TestCase(6f, 6f)]
+            [TestCase(-2381f, -2381f)]
+            [TestCase(-2381f, -2381.00005f)]
+            [TestCase(float.MaxValue, float.MaxValue)]
+            public void AreEqualFloat_ThenThrowException(float expected, float value)
             {
-                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(value, value));
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(expected, value));
+            }
+
+            [Test]
+            [TestCase(0f, 0f)]
+            [TestCase(6f, 6.05f)]
+            [TestCase(6f, 6f)]
+            [TestCase(-2381f, -2381f)]
+            [TestCase(-2381f, -2381.05f)]
+            [TestCase(float.MaxValue, float.MaxValue)]
+            public void AreEqualCustomFloat_ThenThrowException(float expected, float value)
+            {
+                Assert.Throws<ArgumentException>(() => _bouncer.AreNotEqual(expected, value, CustomEpsilon));
             }
 
             [Test]
@@ -103,13 +118,27 @@ namespace Bouncer.Test.BouncerTest
             [Test]
             [TestCase(0f, 1f)]
             [TestCase(1f, 0f)]
-            [TestCase(0.00000001f, 0.1f)]
-            [TestCase(float.MinValue, float.MaxValue)]
+            [TestCase(0.00000005f, 0.5f)]
+            [TestCase(-0.00000005f, -0.5f)]
             [TestCase(45351f, 398f)]
             [TestCase(-45351f, -398f)]
+            [TestCase(float.MinValue, float.MaxValue)]
             public void AreNotEqualFloat_ThenDoNothing(float expected, float value)
             {
                 Assert.DoesNotThrow(() => _bouncer.AreNotEqual(expected, value));
+            }
+
+            [Test]
+            [TestCase(0f, 1f)]
+            [TestCase(1f, 0f)]
+            [TestCase(0.5f, 0.7f)]
+            [TestCase(-0.5f, -0.7f)]
+            [TestCase(45351f, 398f)]
+            [TestCase(-45351f, -398f)]
+            [TestCase(float.MinValue, float.MaxValue)]
+            public void AreNotEqualCustomFloat_ThenDoNothing(float expected, float value)
+            {
+                Assert.DoesNotThrow(() => _bouncer.AreNotEqual(expected, value, CustomEpsilon));
             }
 
             [Test]
