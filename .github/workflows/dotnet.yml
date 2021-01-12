@@ -66,7 +66,7 @@ jobs:
         with:
           name: nupkg
       - name: Debug
-        run: echo "Feed..x ${{ env.MY_GITHUB_FEED }}"
+        run: echo "Feed. $MY_GITHUB_FEED"
       - name: Push to GitHub Feed
         run: |
           for f in ./nupkg/*.nupkg
