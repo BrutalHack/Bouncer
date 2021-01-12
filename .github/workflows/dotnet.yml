@@ -16,9 +16,9 @@ jobs:
       PROJECT_NAME: Bouncer
 
       # GitHub Packages Feed settings
-      GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
-      GITHUB_USER: Benjamin-Justice
-      GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
+      MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
+      MY_GITHUB_USER: Benjamin-Justice
+      MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
 
       # Official NuGet Feed settings
       NUGET_FEED: https://api.nuget.org/v3/index.json
@@ -69,5 +69,5 @@ jobs:
         run: |
           for f in ./nupkg/*.nupkg
           do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f ${{ env.GITHUB_FEED }}
+            curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
           done
