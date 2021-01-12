@@ -65,9 +65,11 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: nupkg
+      - name: Debug
+        run: echo "Feed..x ${{ env.MY_GITHUB_FEED }}"
       - name: Push to GitHub Feed
         run: |
           for f in ./nupkg/*.nupkg
           do
-            curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
+            curl -vX PUT -u "${{ env.MY_GITHUB_USER }}:${{ env.MY_GITHUB_TOKEN }}" -F package=@$f ${{ env.MY_GITHUB_FEED }}
           done
