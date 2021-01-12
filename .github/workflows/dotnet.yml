@@ -18,7 +18,7 @@ jobs:
       # GitHub Packages Feed settings
       GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
       GITHUB_USER: Benjamin-Justice
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
 
       # Official NuGet Feed settings
       NUGET_FEED: https://api.nuget.org/v3/index.json
