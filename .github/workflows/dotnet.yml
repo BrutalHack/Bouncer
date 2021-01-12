@@ -15,10 +15,7 @@ jobs:
       # Project name to pack and publish
       PROJECT_NAME: Bouncer
 
-      # GitHub Packages Feed settings
-      MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
-      MY_GITHUB_USER: Benjamin-Justice
-      MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
+      
 
       # Official NuGet Feed settings
       NUGET_FEED: https://api.nuget.org/v3/index.json
@@ -57,6 +54,12 @@ jobs:
 
 
   prerelease:
+    env:
+      # GitHub Packages Feed settings
+      MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
+      MY_GITHUB_USER: Benjamin-Justice
+      MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
+      
     needs: build
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -71,5 +74,5 @@ jobs:
         run: |
           for f in ./nupkg/*.nupkg
           do
-            curl -vX PUT -u "${{ env.MY_GITHUB_USER }}:${{ env.MY_GITHUB_TOKEN }}" -F package=@$f ${{ env.MY_GITHUB_FEED }}
+            curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
           done
