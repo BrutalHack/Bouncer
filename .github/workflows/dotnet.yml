@@ -1,50 +1,46 @@
 name: .NET
 
 on:
-  push: # all
   pull_request: # all
+  release:
+    types:
+      - published
 
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # Project name to pack and publish
+  PROJECT_NAME: Bouncer
+      
 jobs:
 
   build:
-
     env:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
 
       # Project name to pack and publish
       PROJECT_NAME: Bouncer
-
-      # GitHub Packages Feed settings
-      GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
-      GITHUB_USER: Benjamin-Justice
-      GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
-
       # Official NuGet Feed settings
       NUGET_FEED: https://api.nuget.org/v3/index.json
       NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-
     runs-on: ${{ matrix.os }}
     strategy: 
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - uses: actions/checkout@v2
-    
+  
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.1.812
-    
     - name: Restore dependencies
       run: dotnet restore
-    
     - name: Test
-      run: dotnet test --verbosity normal
-      
+      run: dotnet test --verbosity normal    
     - name: Build
       run: dotnet build --no-restore -c Release
-
     - name: Pack
       if: matrix.os == 'ubuntu-latest'
       run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.*proj
@@ -55,19 +51,52 @@ jobs:
         name: nupkg
         path: ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg
 
-
-  prerelease:
+  publish-nightly:
+    env:
+      # GitHub Packages Feed settings
+      MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
+      MY_GITHUB_USER: Benjamin-Justice
+      MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}      
     needs: build
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v1
         with:
           name: nupkg
+      - name: Debug
+        run: echo "Feed. $MY_GITHUB_FEED"
       - name: Push to GitHub Feed
         run: |
           for f in ./nupkg/*.nupkg
           do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+            curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
           done
+
+  publish-release:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+      - name: Create Release NuGet package
+        run: |
+          arrTag=(${GITHUB_REF//\// })
+          VERSION="${arrTag[2]}"
+          echo Version: $VERSION
+          VERSION="${VERSION//v}"
+          echo Clean Version: $VERSION
+          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.*proj
+      - name: Push to GitHub Feed
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
+          done
+      - name: Push to NuGet Feed
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
