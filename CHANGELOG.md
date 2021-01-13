@@ -1,5 +1,8 @@
 # Release Notes
 
+## 1.0.2
+- Updated NuGet metadata with link to new Changelog/Release Notes.
+
 ## 1.0.1
 - Migrated CI from Travis CI to Github Actions
 - Automate NuGet publishing via Github Actions
