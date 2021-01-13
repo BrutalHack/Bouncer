@@ -7,14 +7,19 @@
 		<PackageVersion>1.0.0</PackageVersion>
 		<Title>Bouncer</Title>
 		<Description>Lightweight Runtime-Only Contracts for .Net Standard 2.0. Focus lies on Readability and Extensibility. Under MIT License.</Description>
-		<Copyright>Copyright 2019-2020</Copyright>
+		<Copyright>Copyright 2019-2021</Copyright>
+		
+		<!-- NuGet settings -->
+		<PackageId>BrutalHack.Bouncer</PackageId>
+		<PackageTags>contract, validate, check, runtime, argument, parameter, constraint</PackageTags>
+		<PackageReleaseNotes>https://raw.githubusercontent.com/BrutalHack/Bouncer/main/CHANGELOG.md</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/BrutalHack/Bouncer</PackageProjectUrl>
 		<PackageLicenseUrl>https://github.com/BrutalHack/Bouncer/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>bouncer-128x128.png</PackageIcon>
 		<RepositoryUrl>https://github.com/BrutalHack/Bouncer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>contract, validate, check, runtime, argument, parameter, constraint</PackageTags>
-		<PackageReleaseNotes>Added Bouncer.IsNotZero for int and float; Fixed issue with custom epsilon in AreEqual and AreNotEqual for float.</PackageReleaseNotes>
-		<PackageId>BrutalHack.Bouncer</PackageId>
+
 		<Authors>BrutalHack</Authors>
 		<AssemblyName>Bouncer</AssemblyName>
 	</PropertyGroup>
