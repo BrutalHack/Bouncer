@@ -51,7 +51,7 @@ jobs:
         name: nupkg
         path: ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg
 
-  prerelease:
+  publish-nightly:
     env:
       # GitHub Packages Feed settings
       MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
@@ -74,7 +74,7 @@ jobs:
             curl -vX PUT -u "$MY_GITHUB_USER:$MY_GITHUB_TOKEN" -F package=@$f $MY_GITHUB_FEED
           done
 
-  deploy:
+  publish-release:
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
