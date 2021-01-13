@@ -22,5 +22,12 @@
 		<Authors>BrutalHack</Authors>
 		<AssemblyName>Bouncer</AssemblyName>
 	</PropertyGroup>
+	 
+	<ItemGroup>
+		<None Include="../bouncer-128x128.png">
+			<Pack>true</Pack>
+			<PackagePath>$(PackageIconUrl)</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>
