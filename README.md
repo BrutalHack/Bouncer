@@ -1,3 +1,5 @@
+![Bouncer Logo](https://raw.githubusercontent.com/BrutalHack/Bouncer/main/bouncer-128x128.png)
+
 # Bouncer
 Bouncer provides lightweight runtime-only "contracts" for .Net applications. 
 Focus lies on readability, extensibility and a high unit test coverage.
