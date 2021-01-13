@@ -21,9 +21,6 @@ jobs:
 
       # Project name to pack and publish
       PROJECT_NAME: Bouncer
-      # Official NuGet Feed settings
-      NUGET_FEED: https://api.nuget.org/v3/index.json
-      NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
     runs-on: ${{ matrix.os }}
     strategy: 
       matrix:
@@ -75,6 +72,10 @@ jobs:
           done
 
   publish-release:
+    env:
+      # Official NuGet Feed settings
+      NUGET_FEED: https://api.nuget.org/v3/index.json
+      NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
