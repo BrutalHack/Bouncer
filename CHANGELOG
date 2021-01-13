@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.0.1
+- Migrated CI from Travis CI to Github Actions
+- Automate NuGet publishing via Github Actions
+
 ## 1.0.0
 - Added Bouncer.IsNotZero for int and float
 - Fixed issue with custom epsilon in AreEqual and AreNotEqual for float
