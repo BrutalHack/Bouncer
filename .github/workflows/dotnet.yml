@@ -11,16 +11,14 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   # Project name to pack and publish
   PROJECT_NAME: Bouncer
+  # GitHub Packages Feed settings
+  MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
+  MY_GITHUB_USER: Benjamin-Justice
+  MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}
       
 jobs:
 
   build:
-    env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-
-      # Project name to pack and publish
-      PROJECT_NAME: Bouncer
     runs-on: ${{ matrix.os }}
     strategy: 
       matrix:
@@ -49,11 +47,6 @@ jobs:
         path: ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg
 
   publish-nightly:
-    env:
-      # GitHub Packages Feed settings
-      MY_GITHUB_FEED: https://nuget.pkg.github.com/Bouncer/
-      MY_GITHUB_USER: Benjamin-Justice
-      MY_GITHUB_TOKEN: ${{ secrets.ARTIFACT_GITHUB_TOKEN }}      
     needs: build
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
